@@ -15,7 +15,7 @@ if 1 == 1:
     i = 0
 
     while i < 2:
-        print "i is " + str(i)
+        #print "i is " + str(i)
         time.sleep(10)
         i = i + 1
 

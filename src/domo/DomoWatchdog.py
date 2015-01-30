@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import time
-from domo import DomoDB, DomoSensor
+from domo import DomoDB, DomoSensor, DomoLog
 
 class DomoWatchdog:
     #class objects
@@ -18,7 +18,7 @@ class DomoWatchdog:
         #read all the configured sensors and create objects
         dbsensors = self.mydb.exec_query("select * from sensors;")
         i = 0
-        while i < 1:
+        while i < 2:
             for dbsensor in dbsensors:
                 DomoLog.log('INFO', 'watchdog', "found sensor {0}".format(dbsensor[2]))
                 mysensor = DomoSensor.DomoSensor(dbsensor)
@@ -30,7 +30,7 @@ class DomoWatchdog:
                 else:
                     DomoLog.log('WARN', 'watchdog', 'sensor is not alive. trying restart')
             time.sleep(10)
-            i = i + 2
+            i = i + 1
 
         #closes open handles to db or files
         self.mydb.disconnect()

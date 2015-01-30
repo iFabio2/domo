@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import sqlite3
+from domo import DomoLog
 
 class DomoDB:
     def connect(self):
-        print "connecting to database"
+        DomoLog.log("DEBUG", "db", "connecting to database")
         self.myconn = sqlite3.connect('domo.db')
         self.mycurs = self.myconn.cursor()
      
@@ -12,5 +13,5 @@ class DomoDB:
         return self.mycurs.execute(myquery)
 
     def disconnect(self):
-        print "disconnecting from database"
+        DomoLog.log("DEBUG", "sensor", "disconnecting from database")
         self.myconn.close()

@@ -12,10 +12,11 @@ class DomoApp:
     def run(self):
         '''starting the threads, of course first the listener, then
            the watchdog'''
+        DomoLog.log('INFO', 'app', 'starting listener')
 #        self.listener_process = Process(target=self.start_listener)
 #        self.listener_process.daemon = True
 #        self.listener_process.start()
-
+	DomoLog.log('INFO', 'app', 'starting watchdog')
         self.watchdog_process = Process(target=self.start_watchdog)
         self.watchdog_process.daemon = True
         self.watchdog_process.start()

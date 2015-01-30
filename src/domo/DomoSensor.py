@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import serial
+from domo import DomoLog
 
 class DomoSensor:
     id = 0
@@ -13,14 +14,15 @@ class DomoSensor:
     def request_ack(self):
         try:
             #try to open the serial port from Moteino
-            print "opening serial"
+            DomoLog.log("DEBUG", "sensor", "opening serial")
+
             myserial = serial.Serial('/dev/ptys0', 9600, timeout=5)
             if myserial.isOpen():
-                print "\trequesting ack"
+                DomoLog.log("DEBUG", "sensor", "requesting ack")
                 #myserial.write("ciao\n")
                 #myserial.flush()
                 myserial.close()
-                print "serial closed"
+                DomoLog.log("DEBUG", "sensor", "serial closed")
             else:
                 raise
         except:
