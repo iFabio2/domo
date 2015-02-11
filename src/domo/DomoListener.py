@@ -3,11 +3,13 @@
 import serial
 import time
 from domo import DomoLog
+from multiprocessing import Lock
 
 class DomoListener:
-
-    def __init__(self):
-        pass 
+    plock = Lock()
+    
+    def __init__(self, plock):
+        self.plock = plock
 
     def run(self):
         """ This function starts the Listene thread which waits for incoming messages
@@ -22,16 +24,16 @@ class DomoListener:
                 while 1:
                     #myline = myserial.readline()
                     if len(myline) > 0:
-                        print "we have something " + myline
+                        DomoLog.log('DEBUG', 'listener', 'message arrived: ' + myline)
                         self.analyze(myline.split('|'))
                     time.sleep(5)
                 myserial.close()
             else:
-                raise
+                return False
         except:
-             return 1
+             return False
 
-        return 0
+        return True
 
     def analyze(self, message):
         ''' This function takes the proper action when a message is received.
@@ -44,5 +46,7 @@ class DomoListener:
                 TRIG -> trigger alarm for the sensor
                 EXEC -> execute the given action
                 QUERY -> query a sensor value
+                ACK -> request a sensor ACK
+                RACK -> response to ACK (ok)
         '''
-        print message[0]
+        pass

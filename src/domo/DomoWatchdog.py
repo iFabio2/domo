@@ -2,23 +2,25 @@
 
 import time
 from domo import DomoDB, DomoSensor, DomoLog
+from multiprocessing import Lock
 
 class DomoWatchdog:
     #class objects
     mydb = DomoDB.DomoDB()
     mysensors = []
+    plock = Lock()
 
-    def __init__(self):
-        pass
+    def __init__(self, plock):
+        self.plock = plock
 
     def run(self):
-        DomoLog.log('INFO', 'listener', 'DomoWatchdog starting up')
+        DomoLog.log('INFO', 'watchdog', 'DomoWatchdog starting up')
         self.mydb.connect()
 
-        #read all the configured sensors and create objects
-        dbsensors = self.mydb.exec_query("select * from sensors;")
-        i = 0
-        while i < 2:
+        while 1:
+            #read all the configured sensors and create objects
+            dbsensors = self.mydb.exec_query("select * from sensors;")
+
             for dbsensor in dbsensors:
                 DomoLog.log('INFO', 'watchdog', "found sensor {0}".format(dbsensor[2]))
                 mysensor = DomoSensor.DomoSensor(dbsensor)
@@ -30,7 +32,6 @@ class DomoWatchdog:
                 else:
                     DomoLog.log('WARN', 'watchdog', 'sensor is not alive. trying restart')
             time.sleep(10)
-            i = i + 1
 
         #closes open handles to db or files
         self.mydb.disconnect()

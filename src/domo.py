@@ -1,28 +1,27 @@
 #!/usr/bin/python
-import sys, time
+import sys, time, signal, os
 from domo import DomoApp, DomoLog
 
 #main object creation
 myapp = DomoApp.DomoApp()
 
-#try:
-if 1 == 1:
+try:
     '''first thing we do is to create the main object
        which in turn will create the rest of the objects'''
     DomoLog.log('INFO', 'main', 'starting threads')
     myapp.run()
+    keepalive = True
+    
+    while keepalive:
+        time.sleep(5)
 
-    i = 0
+except KeyboardInterrupt:
+    DomoLog.log('INFO', 'main', 'shutdown requested')
 
-    while i < 2:
-        #print "i is " + str(i)
-        time.sleep(10)
-        i = i + 1
+except Exception as err:
+    print "FATAL: {0} in {1} at line {2}".format(sys.exc_info()[0], os.path.basename(sys.exc_info()[2].tb_frame.f_code.co_filename), sys.exc_info()[2].tb_lineno)
+    DomoLog.log('ERROR', 'main', 'caught exception')
 
-#except:
-#    print "FATAL: {0}".format(sys.exc_info()[0])
-#    DomoLog.log('ERROR', 'main', 'caught exception')
-
-#finally:
+finally:
     myapp.cleanup()
     DomoLog.log('INFO', 'main', 'clean exit')

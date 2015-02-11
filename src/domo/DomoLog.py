@@ -5,4 +5,4 @@ def log(message_type, message_sender, message):
 #    mylog = open('domo.log', 'w')
 #    mylog.write(message_type + '\t[' + message_sender  + ']\t'+ message + '\n')
 #    mylog.close()
-    print(message_type + '\t[' + message_sender  + ']\t'+ message)
+    print '[{:5s}] [{:10s}] {:s}'.format(message_type, message_sender, message)
